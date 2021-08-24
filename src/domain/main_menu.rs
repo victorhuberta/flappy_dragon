@@ -1,8 +1,8 @@
 use bracket_lib::prelude::VirtualKeyCode;
 
 pub struct MainMenuState {
-    pub start_playing: bool,
-    pub quit_game: bool,
+    start_playing: bool,
+    quit_game: bool,
 }
 
 impl MainMenuState {
@@ -13,6 +13,14 @@ impl MainMenuState {
         }
     }
 
+    pub fn should_start_playing(&self) -> bool {
+        self.start_playing
+    }
+
+    pub fn should_quit_game(&self) -> bool {
+        self.quit_game
+    }
+
     pub fn accept_key(&mut self, key: Option<VirtualKeyCode>) {
         if let Some(key) = key {
             match key {
@@ -21,11 +29,6 @@ impl MainMenuState {
                 _ => {}
             }
         }
-    }
-
-    pub fn reset(&mut self) {
-        self.start_playing = false;
-        self.quit_game = false;
     }
 }
 
@@ -39,8 +42,8 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::P));
 
-        assert!(state.start_playing);
-        assert!(!state.quit_game);
+        assert!(state.should_start_playing());
+        assert!(!state.should_quit_game());
     }
 
     #[test]
@@ -49,8 +52,8 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::Q));
 
-        assert!(!state.start_playing);
-        assert!(state.quit_game);
+        assert!(!state.should_start_playing());
+        assert!(state.should_quit_game());
     }
 
     #[test]
@@ -59,7 +62,7 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::X));
 
-        assert!(!state.start_playing);
-        assert!(!state.quit_game);
+        assert!(!state.should_start_playing());
+        assert!(!state.should_quit_game());
     }
 }

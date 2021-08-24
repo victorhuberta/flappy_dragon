@@ -36,10 +36,10 @@ impl State {
         ctx.print_centered(9, "(Q) Quit Game");
 
         self.main_menu.accept_key(ctx.key);
-        if self.main_menu.start_playing {
+        if self.main_menu.should_start_playing() {
             self.switch_to_play_mode();
         }
-        if self.main_menu.quit_game {
+        if self.main_menu.should_quit_game() {
             ctx.quitting = true;
         }
     }
@@ -57,7 +57,7 @@ impl State {
             ctx.set(x, y, fg, bg, symbol);
         }
 
-        if self.play.is_game_over {
+        if self.play.should_game_over() {
             self.switch_to_game_over_mode();
         }
     }
@@ -69,10 +69,10 @@ impl State {
         ctx.print_centered(9, "(Q) Quit Game");
 
         self.game_over.accept_key(ctx.key);
-        if self.game_over.play_again {
+        if self.game_over.should_play_again() {
             self.switch_to_play_mode();
         }
-        if self.game_over.quit_game {
+        if self.game_over.should_quit_game() {
             ctx.quitting = true;
         }
     }

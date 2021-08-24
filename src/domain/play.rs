@@ -1,10 +1,10 @@
 use bracket_lib::prelude::VirtualKeyCode;
 
-use crate::domain::*;
+use crate::domain::{Player, RenderInfo};
 
 pub struct PlayState {
     player: Player,
-    pub is_game_over: bool,
+    is_game_over: bool,
 }
 
 impl PlayState {
@@ -13,6 +13,10 @@ impl PlayState {
             player: Player::new(),
             is_game_over: false,
         }
+    }
+
+    pub fn should_game_over(&self) -> bool {
+        self.is_game_over
     }
 
     pub fn accept_key(&mut self, key: Option<VirtualKeyCode>) {
@@ -31,5 +35,37 @@ impl PlayState {
     pub fn reset(&mut self) {
         self.player = Player::new();
         self.is_game_over = false;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn player_falls_to_their_death() {
+        let mut state = PlayState::new();
+
+        // Trigger player's physics 20 times.
+        for _ in 0..20 {
+            state.update(40.1);
+        }
+
+        assert!(state.should_game_over());
+    }
+
+    #[test]
+    fn reset_state() {
+        let mut state = PlayState::new();
+        let ori_render_info = state.render_info();
+        // Let player fall to their death.
+        for _ in 0..20 {
+            state.update(40.1);
+        }
+
+        state.reset();
+
+        assert_eq!(state.render_info(), ori_render_info);
+        assert!(!state.should_game_over());
     }
 }

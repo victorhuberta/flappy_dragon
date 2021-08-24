@@ -1,8 +1,8 @@
 use bracket_lib::prelude::VirtualKeyCode;
 
 pub struct GameOverState {
-    pub play_again: bool,
-    pub quit_game: bool,
+    play_again: bool,
+    quit_game: bool,
 }
 
 impl GameOverState {
@@ -11,6 +11,14 @@ impl GameOverState {
             play_again: false,
             quit_game: false,
         }
+    }
+
+    pub fn should_play_again(&self) -> bool {
+        self.play_again
+    }
+
+    pub fn should_quit_game(&self) -> bool {
+        self.quit_game
     }
 
     pub fn accept_key(&mut self, key: Option<VirtualKeyCode>) {
@@ -39,8 +47,8 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::P));
 
-        assert!(state.play_again);
-        assert!(!state.quit_game);
+        assert!(state.should_play_again());
+        assert!(!state.should_quit_game());
     }
 
     #[test]
@@ -49,8 +57,8 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::Q));
 
-        assert!(!state.play_again);
-        assert!(state.quit_game);
+        assert!(!state.should_play_again());
+        assert!(state.should_quit_game());
     }
 
     #[test]
@@ -59,7 +67,19 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::X));
 
-        assert!(!state.play_again);
-        assert!(!state.quit_game);
+        assert!(!state.should_play_again());
+        assert!(!state.should_quit_game());
+    }
+
+    #[test]
+    fn reset_state() {
+        let mut state = GameOverState::new();
+        state.accept_key(Some(VirtualKeyCode::P));
+        state.accept_key(Some(VirtualKeyCode::Q));
+
+        state.reset();
+
+        assert!(!state.should_play_again());
+        assert!(!state.should_quit_game());
     }
 }
