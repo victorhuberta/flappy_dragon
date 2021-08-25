@@ -2,6 +2,7 @@ use bracket_lib::prelude::*;
 use std::cmp;
 
 use crate::domain::*;
+use crate::infra::MyRNG;
 
 #[derive(Debug)]
 pub struct Obstacle {
@@ -11,11 +12,10 @@ pub struct Obstacle {
 }
 
 impl Obstacle {
-    pub fn new(x: i32, score: i32) -> Self {
-        let mut rand_gen = RandomNumberGenerator::new();
+    pub fn new(x: i32, score: i32, rng: &mut MyRNG) -> Self {
         Self {
             x,
-            gap_y: rand_gen.range(PLAY_ZONE_TOP_Y, SCREEN_HEIGHT),
+            gap_y: rng.range_i32(PLAY_ZONE_TOP_Y, SCREEN_HEIGHT),
             gap_size: cmp::max(2, 20 - score),
         }
     }

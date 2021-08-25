@@ -4,6 +4,7 @@ use bracket_lib::prelude::*;
 
 mod controller;
 mod domain;
+mod infra;
 
 fn main() -> BError {
     let ctx = BTermBuilder::simple80x50()

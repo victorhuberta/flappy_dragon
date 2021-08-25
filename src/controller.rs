@@ -1,6 +1,7 @@
 use bracket_lib::prelude::*;
 
 use crate::domain::{GameOverState, MainMenuState, PlayState};
+use crate::infra::MyRNG;
 
 pub struct State {
     mode: GameMode,
@@ -24,7 +25,7 @@ impl State {
         Self {
             mode: GameMode::MainMenu,
             main_menu: MainMenuState::new(),
-            play: PlayState::new(),
+            play: PlayState::new(MyRNG::new()),
             game_over: GameOverState::new(),
         }
     }
