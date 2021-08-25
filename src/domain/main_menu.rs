@@ -13,11 +13,11 @@ impl MainMenuState {
         }
     }
 
-    pub fn should_start_playing(&self) -> bool {
+    pub fn start_playing(&self) -> bool {
         self.start_playing
     }
 
-    pub fn should_quit_game(&self) -> bool {
+    pub fn quit_game(&self) -> bool {
         self.quit_game
     }
 
@@ -42,8 +42,8 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::P));
 
-        assert!(state.should_start_playing());
-        assert!(!state.should_quit_game());
+        assert!(state.start_playing());
+        assert!(!state.quit_game());
     }
 
     #[test]
@@ -52,8 +52,8 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::Q));
 
-        assert!(!state.should_start_playing());
-        assert!(state.should_quit_game());
+        assert!(!state.start_playing());
+        assert!(state.quit_game());
     }
 
     #[test]
@@ -62,7 +62,7 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::X));
 
-        assert!(!state.should_start_playing());
-        assert!(!state.should_quit_game());
+        assert!(!state.start_playing());
+        assert!(!state.quit_game());
     }
 }

@@ -21,7 +21,6 @@ mod globals {
     pub const SCREEN_HEIGHT: i32 = 50;
     pub const STATUS_BAR_HEIGHT: i32 = 3;
     pub const GRAVITY: f32 = 0.2;
-    pub const TERMINAL_VELOCITY: f32 = 2.0;
 
     pub type RenderInfo = (i32, i32, (u8, u8, u8), (u8, u8, u8), u16);
 }

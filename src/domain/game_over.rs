@@ -13,11 +13,11 @@ impl GameOverState {
         }
     }
 
-    pub fn should_play_again(&self) -> bool {
+    pub fn play_again(&self) -> bool {
         self.play_again
     }
 
-    pub fn should_quit_game(&self) -> bool {
+    pub fn quit_game(&self) -> bool {
         self.quit_game
     }
 
@@ -47,8 +47,8 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::P));
 
-        assert!(state.should_play_again());
-        assert!(!state.should_quit_game());
+        assert!(state.play_again());
+        assert!(!state.quit_game());
     }
 
     #[test]
@@ -57,8 +57,8 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::Q));
 
-        assert!(!state.should_play_again());
-        assert!(state.should_quit_game());
+        assert!(!state.play_again());
+        assert!(state.quit_game());
     }
 
     #[test]
@@ -67,8 +67,8 @@ mod tests {
 
         state.accept_key(Some(VirtualKeyCode::X));
 
-        assert!(!state.should_play_again());
-        assert!(!state.should_quit_game());
+        assert!(!state.play_again());
+        assert!(!state.quit_game());
     }
 
     #[test]
@@ -79,7 +79,7 @@ mod tests {
 
         state.reset();
 
-        assert!(!state.should_play_again());
-        assert!(!state.should_quit_game());
+        assert!(!state.play_again());
+        assert!(!state.quit_game());
     }
 }
