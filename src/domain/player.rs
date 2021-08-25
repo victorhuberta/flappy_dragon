@@ -2,33 +2,34 @@ use bracket_lib::prelude::*;
 
 use crate::domain::*;
 
+const PHYSICS_WAIT_MAX: f32 = 40.0;
+const TERMINAL_VELOCITY: f32 = 2.0;
+
 pub struct Player {
-    x: i32, // screen x position
-    y: i32, // screen y position
-    top_height: i32,
-    bottom_height: i32,
-    wx: i32, // world x position
+    x: i32,
+    y: i32,
     velocity: f32,
     physics_wait: f32,
-    physics_wait_max: f32,
-    terminal_velocity: f32,
     pub is_dead: bool,
 }
 
 impl Player {
-    pub fn new(x: i32, y: i32, top_height: i32, bottom_height: i32) -> Self {
+    pub fn new(x: i32, y: i32) -> Self {
         Self {
             x,
             y,
-            top_height,
-            bottom_height,
-            wx: 1,
             velocity: 0.0,
             physics_wait: 0.0,
-            physics_wait_max: 40.0,
-            terminal_velocity: 2.0,
             is_dead: false,
         }
+    }
+
+    pub fn x(&self) -> i32 {
+        self.x
+    }
+
+    pub fn y(&self) -> i32 {
+        self.y
     }
 
     pub fn accept_key(&mut self, key: Option<VirtualKeyCode>) {
@@ -39,11 +40,11 @@ impl Player {
 
     pub fn update(&mut self, frame_time: f32) {
         self.physics_wait += frame_time;
-        if self.physics_wait > self.physics_wait_max {
+        if self.physics_wait > PHYSICS_WAIT_MAX {
             self.physics_wait = 0.0;
             self.gravity_and_move();
         }
-        if self.y > self.bottom_height {
+        if self.y > SCREEN_HEIGHT {
             self.is_dead = true;
         }
     }
@@ -53,17 +54,16 @@ impl Player {
     }
 
     fn gravity_and_move(&mut self) {
-        if self.velocity < self.terminal_velocity {
+        if self.velocity < TERMINAL_VELOCITY {
             self.velocity += GRAVITY;
         }
-        self.wx += 1; // add horizontal progress in the world space
         self.y += self.velocity as i32;
-        if self.y <= self.top_height {
-            self.y = self.top_height;
+        if self.y <= PLAY_ZONE_TOP_Y {
+            self.y = PLAY_ZONE_TOP_Y;
         }
     }
 
     fn flap_wings(&mut self) {
-        self.velocity = -self.terminal_velocity;
+        self.velocity = -TERMINAL_VELOCITY;
     }
 }

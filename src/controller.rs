@@ -47,14 +47,22 @@ impl State {
     fn play_mode(&mut self, ctx: &mut BTerm) {
         ctx.cls_bg(NAVY);
         ctx.print(1, 1, "Press SPACE to flap wings");
-        ctx.print(1, 2, "Score:");
+        ctx.print(1, 2, &format!("Score: {}", self.play.score()));
 
         self.play.accept_key(ctx.key);
         self.play.update(ctx.frame_time_ms);
 
         let canvas = self.play.canvas();
-        let (x, y, fg, bg, symbol) = canvas.player();
+        // Render player.
+        let (x, y, fg, bg, symbol) = canvas.player;
         ctx.set(x, y, fg, bg, symbol);
+        // Render obstacles.
+        for obstacle in canvas.obstacles {
+            for tile in obstacle {
+                let (x, y, fg, bg, symbol) = tile;
+                ctx.set(x, y, fg, bg, symbol);
+            }
+        }
 
         if self.play.is_game_over() {
             self.switch_to_game_over_mode();
@@ -64,6 +72,7 @@ impl State {
     fn game_over_mode(&mut self, ctx: &mut BTerm) {
         ctx.cls();
         ctx.print_centered(5, "YOU ARE DEAD");
+        ctx.print_centered(6, &format!("Score: {}", self.play.score()));
         ctx.print_centered(8, "(P) Play Again");
         ctx.print_centered(9, "(Q) Quit Game");
 
