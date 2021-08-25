@@ -46,8 +46,14 @@ impl State {
 
     fn play_mode(&mut self, ctx: &mut BTerm) {
         ctx.cls_bg(NAVY);
-        ctx.print(1, 1, "Press SPACE to flap wings");
-        ctx.print(1, 2, &format!("Score: {}", self.play.score()));
+        ctx.print_color(1, 1, BLACK, YELLOW, "Press SPACE to flap wings");
+        ctx.print_color(
+            1,
+            2,
+            BLACK,
+            YELLOW,
+            &format!("Score: {}", self.play.score()),
+        );
 
         self.play.accept_key(ctx.key);
         self.play.update(ctx.frame_time_ms);
@@ -71,10 +77,10 @@ impl State {
 
     fn game_over_mode(&mut self, ctx: &mut BTerm) {
         ctx.cls();
-        ctx.print_centered(5, "YOU ARE DEAD");
-        ctx.print_centered(6, &format!("Score: {}", self.play.score()));
-        ctx.print_centered(8, "(P) Play Again");
-        ctx.print_centered(9, "(Q) Quit Game");
+        ctx.print_color_centered(5, RED, BLACK, "YOU ARE DEAD");
+        ctx.print_centered(7, &format!("Score: {}", self.play.score()));
+        ctx.print_centered(9, "(P) Play Again");
+        ctx.print_centered(10, "(Q) Quit Game");
 
         self.game_over.accept_key(ctx.key);
         if self.game_over.play_again() {

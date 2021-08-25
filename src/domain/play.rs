@@ -42,16 +42,23 @@ impl PlayState {
             self.obstacles.push(Obstacle::new(SCREEN_WIDTH, self.score));
         }
 
-        for obstacle in &mut self.obstacles {
-            obstacle.update(frame_time);
+        let mut idx = 0;
+        while idx < self.obstacles.len() {
+            let obstacle = &mut self.obstacles[idx];
+            obstacle.update();
+            if obstacle.should_dispose() {
+                self.obstacles.remove(idx);
+                continue;
+            }
             if obstacle.hits(self.player.x(), self.player.y()) {
                 self.player.is_dead = true;
-                break;
             }
             if obstacle.passes(self.player.x(), self.player.y()) {
                 self.score += 1;
             }
+            idx += 1;
         }
+
         self.player.update(frame_time);
         self.is_game_over = self.player.is_dead;
     }
@@ -59,7 +66,7 @@ impl PlayState {
     pub fn canvas(&self) -> PlayCanvas {
         PlayCanvas {
             player: self.player.render_info(),
-            obstacles: self.obstacles.iter().map(|o| o.render_info()).collect(),
+            obstacles: self.obstacles.iter().map(Obstacle::render_info).collect(),
         }
     }
 
