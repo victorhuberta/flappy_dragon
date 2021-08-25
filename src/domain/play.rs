@@ -91,7 +91,8 @@ mod tests {
 
     use super::*;
 
-    const LONG_FRAME_TIME: f32 = 5000.0; // 5s
+    // All updates are performed under 10s.
+    const LONG_FRAME_TIME: f32 = 10000.0;
 
     #[test]
     fn player_falls_to_their_death() {
@@ -126,6 +127,21 @@ mod tests {
     }
 
     #[test]
+    fn first_obstacle_moves_toward_player() {
+        let mut state = PlayState::new();
+        state.update(LONG_FRAME_TIME); // spawn first obstacle
+
+        let (mut prev_x, _, _, _, _) = state.canvas().obstacles[0][0];
+        for _ in 0..10 {
+            state.update(LONG_FRAME_TIME);
+
+            let (x, _, _, _, _) = state.canvas().obstacles[0][0];
+            assert!(x < prev_x);
+            prev_x = x;
+        }
+    }
+
+    #[test]
     fn reset_state() {
         let mut state = PlayState::new();
         let ori_canvas = state.canvas();
@@ -137,6 +153,7 @@ mod tests {
         state.reset();
 
         assert_eq!(state.canvas(), ori_canvas);
+        assert_eq!(state.score(), 0);
         assert!(!state.is_game_over());
     }
 }
